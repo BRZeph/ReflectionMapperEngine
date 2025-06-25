@@ -1,6 +1,8 @@
-package brzeph.spring.java_motordinamico_demo.motor.usageExample;
+package brzeph.spring.java_motordinamico_demo.engine.usageExample;
 
-import brzeph.spring.java_motordinamico_demo.motor.core.mapper.impl.Mapper;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Read;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Update;
+import brzeph.spring.java_motordinamico_demo.engine.core.mapper.impl.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +46,10 @@ public class PurchaseOrderController {
         if (existingOrder == null) {
             return ResponseEntity.notFound().build();
         }
-
-        PurchaseOrder mergedOrder = Mapper.mergeForUpdate(existingOrder, updatedOrder);
+        PurchaseOrder mergedOrder = Mapper.mergeForX(existingOrder, updatedOrder, Update.class);
+        System.out.println("Existing order: " + existingOrder);
+        System.out.println("Merged order: " + mergedOrder);
+        System.out.println("Updated order: " + updatedOrder);
         database.put(id, mergedOrder);
 
         return ResponseEntity.ok(mergedOrder);

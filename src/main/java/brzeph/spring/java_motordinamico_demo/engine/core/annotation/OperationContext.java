@@ -1,18 +1,16 @@
-package brzeph.spring.java_motordinamico_demo.motor.core.annotation;
+package brzeph.spring.java_motordinamico_demo.engine.core.annotation;
 
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Create;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Read;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Update;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.validations.Required;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Create;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Read;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Update;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.Required;
 
 import java.lang.annotation.Annotation;
 
 public enum OperationContext {
     GET(Read.class),    // Context annotation.
     POST(Create.class), // Context annotation.
-    PUT(Update.class),  // Context annotation.
-
-    REQUIRED(Required.class); // Validation annotation.
+    PUT(Update.class);  // Context annotation.
     /*
     Se o parâmetro não tem annotation de contexto (@Create, @Read ou @Update por enquanto) ->
     ele não terá o no objeto ->

@@ -1,12 +1,17 @@
-package brzeph.spring.java_motordinamico_demo.motor.usageExample;
+package brzeph.spring.java_motordinamico_demo.engine.usageExample;
 
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Create;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Read;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.validations.Required;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Update;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Create;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Read;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.identity.MergeId;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.Required;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Update;
 import java.util.List;
 
 public class OrderItem {
+
+    @Create @Read @Update
+    @MergeId
+    private String id;
 
     @Read @Create
     @Required
@@ -28,6 +33,7 @@ public class OrderItem {
     @Override
     public String toString() {
         return "OrderItem{" +
+                "id='" + id + '\'' +
                 "productCode='" + productCode + '\'' +
                 ", quantity=" + quantity +
                 ", payments=" + payments +
@@ -74,5 +80,13 @@ public class OrderItem {
 
     public void setBackordered(Boolean backordered) {
         this.backordered = backordered;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

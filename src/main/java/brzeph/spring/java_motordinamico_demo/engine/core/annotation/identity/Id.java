@@ -1,4 +1,4 @@
-package brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType;
+package brzeph.spring.java_motordinamico_demo.engine.core.annotation.identity;
 
 
 import java.lang.annotation.ElementType;
@@ -8,4 +8,4 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Read {}
+public @interface Id {}

@@ -1,9 +1,10 @@
-package brzeph.spring.java_motordinamico_demo.motor.usageExample;
+package brzeph.spring.java_motordinamico_demo.engine.usageExample;
 
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Create;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Read;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.validations.Required;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Update;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Create;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Read;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.NotBlank;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.Required;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Update;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +14,7 @@ public class PurchaseOrder {
     private Long id;
 
     @Read @Create
-    @Required
+    @Required @NotBlank
     private String customerName;
 
     @Read @Update @Create

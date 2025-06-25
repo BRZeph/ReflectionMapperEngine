@@ -1,14 +1,16 @@
-package brzeph.spring.java_motordinamico_demo.motor.usageExample;
+package brzeph.spring.java_motordinamico_demo.engine.usageExample;
 
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Create;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Read;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.validations.Required;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Update;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Create;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Read;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.identity.MergeId;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.NotBlank;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.Required;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Update;
 
 public class Payment {
 
-    @Create @Read
-    @Required
+    @Create @Read @Update
+    @Required @NotBlank @MergeId
     private String paymentId;
 
     @Create @Read @Update

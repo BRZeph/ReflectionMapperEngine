@@ -1,4 +1,4 @@
-package brzeph.spring.java_motordinamico_demo.motor.core.annotation.validations;
+package brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations;
 
 
 import java.lang.annotation.ElementType;
@@ -8,4 +8,4 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Required {}
+public @interface NotNull {}

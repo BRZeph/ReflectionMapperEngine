@@ -1,6 +1,6 @@
-package brzeph.spring.java_motordinamico_demo.motor.core.mapper;
+package brzeph.spring.java_motordinamico_demo.engine.core.mapper;
 
-import brzeph.spring.java_motordinamico_demo.motor.core.mapper.impl.Mapper;
+import brzeph.spring.java_motordinamico_demo.engine.core.mapper.impl.Mapper;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;

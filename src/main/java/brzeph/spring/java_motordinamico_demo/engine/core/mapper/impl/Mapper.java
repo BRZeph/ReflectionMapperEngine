@@ -1,7 +1,10 @@
-package brzeph.spring.java_motordinamico_demo.motor.core.mapper.impl;
+package brzeph.spring.java_motordinamico_demo.engine.core.mapper.impl;
 
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Read;
-import brzeph.spring.java_motordinamico_demo.motor.core.annotation.apiCallType.Update;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.OperationContext;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Read;
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Update;
+
+import java.lang.annotation.Annotation;
 
 public class Mapper {
     /**
@@ -32,7 +35,7 @@ public class Mapper {
      * @param <T> Tipo genérico do objeto.
      * @return Novo objeto resultante com o merge aplicado.
      */
-    public static <T> T mergeForUpdate(T base, T update) {
-        return ReflectionMapperEngine.mergeWithAnnotation(base, update, Update.class);
+    public static <T> T mergeForX(T base, T update, Class<? extends Annotation> context) {
+        return ReflectionMapperEngine.mergeWithAnnotation(base, update, context);
     }
 }
