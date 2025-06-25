@@ -3,6 +3,7 @@ package brzeph.spring.java_motordinamico_demo.engine.core.annotation;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.NotBlank;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.NotNull;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.Required;
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.ValidationException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

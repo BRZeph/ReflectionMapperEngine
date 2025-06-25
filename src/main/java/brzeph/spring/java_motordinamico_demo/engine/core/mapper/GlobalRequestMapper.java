@@ -35,7 +35,9 @@ public class GlobalRequestMapper extends RequestBodyAdviceAdapter {
                                 @NonNull MethodParameter parameter,
                                 @NonNull Type targetType,
                                 @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
-//        /*
+// Lógica comentada, este method é aplicado pós Jackson, responsabilidade a baixo passada para
+// CustomContextualMessageConverter.read().
+//         /*
 //        Todos os parâmetros do método são não nulos por definição do spring. Para mais detalhes, ver anotações.
 //         */
 //        try {

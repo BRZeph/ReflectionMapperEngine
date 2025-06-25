@@ -1,6 +1,7 @@
 package brzeph.spring.java_motordinamico_demo.engine.core.mapper.impl;
 
 
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.MergeEngineException;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.identity.Id;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.identity.MergeId;
 
@@ -9,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReflectionMapperEngine {
 
@@ -65,6 +67,11 @@ public class ReflectionMapperEngine {
             throw new IllegalArgumentException("Objetos não podem ser nulos");
         }
 
+        if (!base.getClass().equals(override.getClass())) {
+            throw new MergeEngineException("Classes incompatíveis para merge: "
+                    + base.getClass().getSimpleName() + " ≠ " + override.getClass().getSimpleName());
+        }
+
         try {
             Class<?> clazz = base.getClass();
             @SuppressWarnings("unchecked")
@@ -108,8 +115,99 @@ public class ReflectionMapperEngine {
         }
     }
 
+    /**
+     * Mescla dois objetos complementares numa terceira instância de classe alvo, com validação total.
+     * <p>
+     * Este método assume que todos os campos da classe de destino (resultClass) existem em pelo menos
+     * um dos dois objetos de origem (obj1 ou obj2), e que todos os campos de origem estão representados
+     * no objeto de destino.
+     * </p>
+     * <p>
+     * A correspondência é feita por nome exato dos campos (case-sensitive). Campos duplicados (existentes
+     * em ambas as origens) são preferencialmente extraídos de {@code obj1}.
+     * </p>
+     *
+     * @param obj1        Primeiro objeto de origem (ex: entidade principal).
+     * @param obj2        Segundo objeto de origem (ex: entidade complementar).
+     * @param resultClass Classe da instância de resultado que deve conter a união dos campos.
+     * @param <A>         Tipo do primeiro objeto.
+     * @param <B>         Tipo do segundo objeto.
+     * @param <R>         Tipo do objeto de resultado.
+     * @return Uma instância de {@code resultClass} com todos os campos preenchidos a partir de {@code obj1} e {@code obj2}.
+     *
+     * @throws MergeEngineException Se:
+     *                              <ul>
+     *                                <li>Algum campo da {@code resultClass} não existir em {@code obj1} nem {@code obj2}.</li>
+     *                                <li>Algum campo de {@code obj1} ou {@code obj2} não existir em {@code resultClass}.</li>
+     *                                <li>Algum erro de reflexão ocorrer durante a cópia.</li>
+     *                              </ul>
+     */
+    public static <A, B, R> R mergeIntoThirdObject(A obj1, B obj2, Class<R> resultClass) {
+        if (obj1 == null || obj2 == null || resultClass == null) {
+            throw new MergeEngineException("Objetos e classe de resultado não podem ser nulos");
+        }
+
+        try {
+            R result = resultClass.getDeclaredConstructor().newInstance();
+
+            // Campos dos objetos de origem
+            Set<String> obj1Fields = Arrays.stream(obj1.getClass().getDeclaredFields())
+                    .peek(f -> f.setAccessible(true))
+                    .map(Field::getName)
+                    .collect(Collectors.toSet());
+
+            Set<String> obj2Fields = Arrays.stream(obj2.getClass().getDeclaredFields())
+                    .peek(f -> f.setAccessible(true))
+                    .map(Field::getName)
+                    .collect(Collectors.toSet());
+
+            // Preenche os campos do objeto resultado
+            for (Field targetField : resultClass.getDeclaredFields()) {
+                targetField.setAccessible(true);
+                String name = targetField.getName();
+                Field sourceField = null;
+                Object sourceValue = null;
+
+                if (obj1Fields.contains(name)) {
+                    sourceField = obj1.getClass().getDeclaredField(name);
+                    sourceField.setAccessible(true);
+                    sourceValue = sourceField.get(obj1);
+                } else if (obj2Fields.contains(name)) {
+                    sourceField = obj2.getClass().getDeclaredField(name);
+                    sourceField.setAccessible(true);
+                    sourceValue = sourceField.get(obj2);
+                } else {
+                    throw new MergeEngineException("Campo '" + name + "' do resultado não existe em nenhum dos objetos de origem");
+                }
+
+                targetField.set(result, sourceValue);
+            }
+
+            // Validação de cobertura completa
+            Set<String> resultFields = Arrays.stream(resultClass.getDeclaredFields())
+                    .map(Field::getName)
+                    .collect(Collectors.toSet());
+
+            for (String field : obj1Fields) {
+                if (!resultFields.contains(field)) {
+                    throw new MergeEngineException("Campo '" + field + "' de obj1 não está presente na classe de resultado");
+                }
+            }
+            for (String field : obj2Fields) {
+                if (!resultFields.contains(field)) {
+                    throw new MergeEngineException("Campo '" + field + "' de obj2 não está presente na classe de resultado");
+                }
+            }
+
+            return result;
+        } catch (Exception e) {
+            throw new MergeEngineException("Erro ao mesclar objetos complementares em resultado: " + e.getMessage());
+        }
+    }
+
     private static Object mergeCollections(Object baseValue, Object overrideValue,
-                                           Class<? extends Annotation> annotationClass, Field field) throws Exception {
+                                           Class<? extends Annotation> annotationClass, Field field)
+            throws Exception {
         if (baseValue == null || overrideValue == null) {
             return (overrideValue != null) ? overrideValue : baseValue;
         }

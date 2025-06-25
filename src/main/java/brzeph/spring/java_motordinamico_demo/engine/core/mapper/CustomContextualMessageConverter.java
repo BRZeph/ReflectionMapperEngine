@@ -50,7 +50,7 @@ public class CustomContextualMessageConverter implements HttpMessageConverter<Ob
 
         Map<String, Object> rawMap = objectMapper.readValue(json, new TypeReference<>() {});
 
-        // Inferir o método HTTP
+        // Inferir o method HTTP
         ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attrs == null) throw new IllegalStateException("No request context");
 

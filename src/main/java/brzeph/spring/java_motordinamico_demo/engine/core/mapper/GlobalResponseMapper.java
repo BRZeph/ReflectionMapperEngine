@@ -1,5 +1,6 @@
 package brzeph.spring.java_motordinamico_demo.engine.core.mapper;
 
+import brzeph.spring.java_motordinamico_demo.engine.core.annotation.apiCallType.Read;
 import brzeph.spring.java_motordinamico_demo.engine.core.mapper.impl.Mapper;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,6 @@ public class GlobalResponseMapper implements ResponseBodyAdvice<Object> {
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
         if (body == null) return null;
-        return Mapper.mapForRead(body);
+        return Mapper.mapToMapForX(body, Read.class);
     }
 }
