@@ -32,8 +32,8 @@ public class EngineGlobalExceptionHandler {
      * @param ex a exceção de validação lançada
      * @return resposta HTTP 422 com a mensagem de erro
      */
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<String> handleValidationException(ValidationException ex) {
+    @ExceptionHandler(ValidationEngineException.class)
+    public ResponseEntity<String> handleValidationException(ValidationEngineException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body("Erro de validação: " + ex.getMessage());
@@ -47,6 +47,30 @@ public class EngineGlobalExceptionHandler {
      */
     @ExceptionHandler(GenericEngineError.class)
     public ResponseEntity<String> handleValidationException(GenericEngineError ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Erro interno: " + ex.getMessage());
+    }
+    @ExceptionHandler(ContextMappingEngineError.class)
+    public ResponseEntity<String> handleValidationException(ContextMappingEngineError ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Erro interno: " + ex.getMessage());
+    }
+    @ExceptionHandler(HttpMessageConversionEngineException.class)
+    public ResponseEntity<String> handleValidationException(HttpMessageConversionEngineException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Erro interno: " + ex.getMessage());
+    }
+    @ExceptionHandler(IllegalArgumentEngineException.class)
+    public ResponseEntity<String> handleValidationException(IllegalArgumentEngineException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Erro interno: " + ex.getMessage());
+    }
+    @ExceptionHandler(IllegalStateEngineException.class)
+    public ResponseEntity<String> handleValidationException(IllegalStateEngineException ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Erro interno: " + ex.getMessage());

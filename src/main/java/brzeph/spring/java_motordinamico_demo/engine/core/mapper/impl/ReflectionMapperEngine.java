@@ -1,6 +1,9 @@
 package brzeph.spring.java_motordinamico_demo.engine.core.mapper.impl;
 
 
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.ContextMappingEngineError;
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.IllegalArgumentEngineException;
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.IllegalStateEngineException;
 import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.MergeEngineException;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.identity.Id;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.identity.MergeId;
@@ -59,12 +62,12 @@ public class ReflectionMapperEngine {
      * @param annotationClass Annotation a ser considerada no merge. Se {@code null}, todos os campos são processados.
      * @param <T>             Tipo genérico dos objetos a serem mesclados.
      * @return Novo objeto resultante do merge.
-     * @throws IllegalArgumentException Se qualquer um dos objetos fornecidos for {@code null}.
+     * @throws IllegalArgumentEngineException Se qualquer um dos objetos fornecidos for {@code null}.
      * @throws RuntimeException         Se ocorrer qualquer erro de reflexão durante o merge.
      */
     public static <T> T mergeWithAnnotation(T base, T override, Class<? extends Annotation> annotationClass) {
         if (base == null || override == null) {
-            throw new IllegalArgumentException("Objetos não podem ser nulos");
+            throw new IllegalArgumentEngineException("Objetos não podem ser nulos");
         }
 
         if (!base.getClass().equals(override.getClass())) {
@@ -110,8 +113,8 @@ public class ReflectionMapperEngine {
             return merged;
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao fazer merge com annotation: "
-                    + (annotationClass != null ? annotationClass.getSimpleName() : "ALL FIELDS"), e);
+            throw new MergeEngineException("Erro ao fazer merge com annotation: "
+                    + (annotationClass != null ? annotationClass.getSimpleName() : "ALL FIELDS") + e.getMessage());
         }
     }
 
@@ -223,7 +226,7 @@ public class ReflectionMapperEngine {
 
         Field idField = getMergeIdField(itemType);
         if (idField == null) {
-            throw new IllegalStateException("Nenhum campo com @MergeId ou @Id encontrado em " + itemType.getSimpleName());
+            throw new IllegalStateEngineException("Nenhum campo com @MergeId ou @Id encontrado em " + itemType.getSimpleName());
         }
         idField.setAccessible(true);
 
@@ -231,7 +234,7 @@ public class ReflectionMapperEngine {
         for (Object baseItem : baseCollection) {
             Object id = idField.get(baseItem);
             if (id == null) {
-                throw new IllegalStateException("Item do base collection com id nulo: " + field);
+                throw new IllegalStateEngineException("Item do base collection com id nulo: " + field);
             }
             baseMap.put(id, baseItem);
         }
@@ -241,7 +244,7 @@ public class ReflectionMapperEngine {
         for (Object overrideItem : overrideCollection) {
             Object id = idField.get(overrideItem);
             if (id == null) {
-                throw new IllegalStateException("Item do override collection com id nulo: " + field);
+                throw new IllegalStateEngineException("Item do override collection com id nulo: " + field);
             }
             Object baseItem = baseMap.get(id);
             if (baseItem != null) {
@@ -313,7 +316,7 @@ public class ReflectionMapperEngine {
             }
             return target;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao mapear objeto: " + clazz.getSimpleName(), e);
+            throw new ContextMappingEngineError("Erro ao mapear objeto: " + clazz.getSimpleName() + e.getMessage());
         }
     }
 
@@ -346,7 +349,7 @@ public class ReflectionMapperEngine {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao mapear objeto: " + clazz.getSimpleName(), e);
+            throw new ContextMappingEngineError("Erro ao mapear objeto: " + clazz.getSimpleName() + e.getMessage());
         }
         return result;
     }
@@ -362,7 +365,7 @@ public class ReflectionMapperEngine {
         if (List.class.isAssignableFrom(collectionType)) {
             return new ArrayList<>();
         }
-        throw new UnsupportedOperationException("Collection não suportada: " + collectionType);
+        throw new IllegalArgumentEngineException("Collection não suportada: " + collectionType);
     }
 
     private static Class<?> getGenericType(Field field) {

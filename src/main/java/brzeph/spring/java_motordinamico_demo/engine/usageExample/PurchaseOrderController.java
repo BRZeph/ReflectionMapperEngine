@@ -24,6 +24,10 @@ public class PurchaseOrderController {
         incomingOrder.setId(idCounter++);
         incomingOrder.setCreatedAt(LocalDateTime.now());
         incomingOrder.setSecretData("Se isso apareceu no front, estou triste.");
+        long i = 0L;
+        for (OrderItem item : incomingOrder.getItems()) {
+            item.setId(i++);
+        }
         database.put(incomingOrder.getId(), incomingOrder);
         System.out.println("Created order: " + database.get(incomingOrder.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(incomingOrder);

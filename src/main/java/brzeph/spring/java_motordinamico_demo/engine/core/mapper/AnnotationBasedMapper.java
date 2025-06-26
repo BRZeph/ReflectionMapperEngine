@@ -2,7 +2,6 @@ package brzeph.spring.java_motordinamico_demo.engine.core.mapper;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.ArrayList;
@@ -11,8 +10,8 @@ import java.util.Map;
 
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.OperationContext;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.ValidationRule;
-import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.Required;
-import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.GenericEngineError;
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.ContextMappingEngineError;
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.ValidationEngineException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Component;
@@ -63,7 +62,7 @@ public class AnnotationBasedMapper {
             return target;
 
         } catch (Exception e) {
-            throw new GenericEngineError("Erro no mapeamento de contexto: " + e.getMessage());
+            throw new ContextMappingEngineError("Erro no mapeamento de contexto: " + e.getMessage());
         }
     }
 
@@ -93,7 +92,7 @@ public class AnnotationBasedMapper {
                 }
 
             } catch (IllegalAccessException e) {
-                throw new GenericEngineError("Erro ao validar campo: " + field.getName() + ", " + e.getMessage());
+                throw new ValidationEngineException("Erro ao validar campo: " + field.getName() + ", " + e.getMessage());
             }
         }
     }

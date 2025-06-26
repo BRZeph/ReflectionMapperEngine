@@ -9,9 +9,9 @@ import java.util.List;
 
 public class OrderItem {
 
-    @Create @Read @Update
+    @Read @Update
     @MergeId
-    private String id;
+    private Long id;
 
     @Read @Create
     @Required
@@ -82,11 +82,11 @@ public class OrderItem {
         this.backordered = backordered;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

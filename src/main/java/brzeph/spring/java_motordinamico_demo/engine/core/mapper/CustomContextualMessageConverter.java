@@ -1,12 +1,15 @@
 package brzeph.spring.java_motordinamico_demo.engine.core.mapper;
 
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.OperationContext;
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.HttpMessageConversionEngineException;
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.IllegalStateEngineException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -52,7 +55,7 @@ public class CustomContextualMessageConverter implements HttpMessageConverter<Ob
 
         // Inferir o method HTTP
         ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attrs == null) throw new IllegalStateException("No request context");
+        if (attrs == null) throw new IllegalStateEngineException("No request context");
 
         String method = attrs.getRequest().getMethod();
         OperationContext context = OperationContext.valueOf(method);
@@ -62,6 +65,6 @@ public class CustomContextualMessageConverter implements HttpMessageConverter<Ob
 
     @Override
     public void write(Object o, MediaType mediaType, HttpOutputMessage outputMessage) throws IOException {
-        throw new UnsupportedOperationException("Somente leitura suportada.");
+        throw new HttpMessageConversionEngineException("Somente leitura suportada.");
     }
 }

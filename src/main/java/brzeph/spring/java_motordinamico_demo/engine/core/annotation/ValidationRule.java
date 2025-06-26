@@ -3,7 +3,7 @@ package brzeph.spring.java_motordinamico_demo.engine.core.annotation;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.NotBlank;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.NotNull;
 import brzeph.spring.java_motordinamico_demo.engine.core.annotation.validations.Required;
-import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.ValidationException;
+import brzeph.spring.java_motordinamico_demo.engine.core.exceptions.ValidationEngineException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -15,19 +15,19 @@ public enum ValidationRule {
 
     REQUIRED(Required.class, (field, value) -> {
         if (value == null) {
-            throw new ValidationException("Campo obrigatório não informado: " + field.getName());
+            throw new ValidationEngineException("Campo obrigatório não informado: " + field.getName());
         }
     }),
 
     NOT_NULL(NotNull.class, (field, value) -> {
         if (value == null) {
-            throw new ValidationException("Campo não pode ser nulo: " + field.getName());
+            throw new ValidationEngineException("Campo não pode ser nulo: " + field.getName());
         }
     }),
 
     NOT_BLANK(NotBlank.class, (field, value) -> {
         if (value == null || (value instanceof String && ((String) value).trim().isEmpty())) {
-            throw new ValidationException("Campo não pode estar em branco: " + field.getName());
+            throw new ValidationEngineException("Campo não pode estar em branco: " + field.getName());
         }
     });
 

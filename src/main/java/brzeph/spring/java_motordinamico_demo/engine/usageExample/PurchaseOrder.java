@@ -34,7 +34,7 @@ public class PurchaseOrder {
     @Read @Update
     private String internalComments;
 
-    private String secretData; // Este campo não deve aparecer em Get.
+    private String secretData;
 
     @Override
     public String toString() {
